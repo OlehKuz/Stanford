@@ -90,7 +90,7 @@ public class Breakout extends GraphicsProgram {
 			if(collider != null){
 				collision(collider);
 			}
-      		bounceBall();
+			bounceBall();
 			pause(15);
       
       // Handles Game over situations
