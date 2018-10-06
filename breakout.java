@@ -137,9 +137,16 @@ public class Breakout extends GraphicsProgram {
 		return bang;
 	}
 	// changing direction of ball if it has collided. Removing a brick if ball collided w a brick. 
-	private void collision(GObject brickCollider){	
-		vy = - vy;
-		if(brickCollider != paddle){
+	
+	private void collision(GObject brickCollider){			
+		if(brickCollider == paddle){
+			// sticky pedal - need to change only to negative direction
+			if(vy > 0) {
+				vy = -vy;
+			}		
+		}
+		else{
+			vy = -vy;
 			remove(brickCollider);
 			bricksLeft--;
 		}
