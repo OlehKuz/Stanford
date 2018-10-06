@@ -64,7 +64,7 @@ public class Breakout extends GraphicsProgram {
 /** Runs the Breakout program. */
 	public void run() {
 		/* You fill this in, along with any subsidiary methods */
-		setSize(APPLICATION_WIDTH + 20, APPLICATION_HEIGHT + 50);
+		setSize(APPLICATION_WIDTH + 20, APPLICATION_HEIGHT + 50); // i messed up w calculations and need to set a bigger window
 		addMouseListeners();
 		createSetUP();
 		while(turnsLeft != 0){
@@ -90,10 +90,11 @@ public class Breakout extends GraphicsProgram {
 			if(collider != null){
 				collision(collider);
 			}
-      bounceBall();
+      		bounceBall();
 			pause(15);
       
       // Handles Game over situations
+			// if ball touched lower border  
 			if(ball.getY() >= HEIGHT - BALL_RADIUS *2){
 				remove(ball);
 				turnsLeft--;
@@ -102,6 +103,8 @@ public class Breakout extends GraphicsProgram {
 				pause(1000);
 				return;
 			}
+			
+			// i player destroyed all the bricks
 			if(bricksLeft == 0){
 				GLabel congrat = new GLabel("Congrats, you won!" ,WIDTH / 2,HEIGHT / 2);
 				add(congrat);
@@ -110,6 +113,8 @@ public class Breakout extends GraphicsProgram {
 			
 		}		
 	}
+	/* checking for collision on 4 sides of a ball (if we imagine that ball is inside a rectangle of the same size,
+	possible points of colision as rectangle corners)*/
 	
 	private GObject getCollidingObject(){
 		GObject bang = null;
@@ -131,7 +136,7 @@ public class Breakout extends GraphicsProgram {
 		}
 		return bang;
 	}
-	
+	// changing direction of ball if it has collided. Removing a brick if ball collided w a brick. 
 	private void collision(GObject brickCollider){	
 		vy = - vy;
 		if(brickCollider != paddle){
@@ -139,7 +144,7 @@ public class Breakout extends GraphicsProgram {
 			bricksLeft--;
 		}
 	}
-	
+	// bouncing ball if it touches a wall 
 	private void bounceBall(){
 		if(ball.getX() <= 0 || ball.getX() >= WIDTH - BALL_RADIUS *2){
 			vx = - vx;
@@ -148,9 +153,13 @@ public class Breakout extends GraphicsProgram {
 			vy = - vy;
 		}
 	}
+	/*  Draw setup bricks of size " NBRICK_ROW X NBRICKS_PER_ROW "  using GRect private instance object. 
+		Color two rows into the same color using setCol(i);
+	*/
 	private void drawBricks(){
 		for(int i = 0; i < NBRICK_ROWS; i++){			
 			for(int j = 0; j < NBRICKS_PER_ROW; j++){
+				// x, y coordinates for each brick , shifted accordingly to its position 
 				double xBrick = x1Brick + j * (BRICK_WIDTH + BRICK_SEP);
 				int yBrick = BRICK_Y_OFFSET + i * (BRICK_HEIGHT + BRICK_SEP);
 				brick = new GRect(xBrick,yBrick,BRICK_WIDTH,BRICK_HEIGHT);
@@ -160,6 +169,7 @@ public class Breakout extends GraphicsProgram {
 			}
 		}	
 	}
+	// creating a paddle
 	
 	private void drawPaddle(){
 		double xPaddle = (WIDTH - PADDLE_WIDTH)/2;
@@ -169,6 +179,7 @@ public class Breakout extends GraphicsProgram {
 		add(paddle);	
 	}
 	
+	// Mouse Listeners method to change the position of paddle in x direction when we move mouse
 	public void mouseMoved(MouseEvent event){
 		double xPad = event.getX();
 		if(xPad + PADDLE_WIDTH >= WIDTH ){
@@ -176,6 +187,8 @@ public class Breakout extends GraphicsProgram {
 		}
 		paddle.setLocation(xPad, HEIGHT - PADDLE_Y_OFFSET);
 	}
+	
+	// color current brick object according to its row number
 	private void setCol(int i){
 		switch(i){
 			case 0: case 1:
@@ -196,7 +209,7 @@ public class Breakout extends GraphicsProgram {
 		}	
 	}
 	
-	
+	// instance variables
 	private GRect brick;
 	private GRect paddle;
 	private GOval ball;
