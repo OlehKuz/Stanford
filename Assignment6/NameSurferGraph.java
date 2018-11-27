@@ -57,6 +57,7 @@ public class NameSurferGraph extends GCanvas
 		
 	}
 	
+	//Integer.toString(decade) helps me to print the number in a field for Strings
 	private void addDecadeLabels(int decade, int x0, int height) {
 		add(new GLabel(Integer.toString(decade), x0, height - DECADE_LABEL_MARGIN_SIZE));
 	}
