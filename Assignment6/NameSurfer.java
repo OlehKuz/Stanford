@@ -33,6 +33,7 @@ public class NameSurfer extends Program implements NameSurferConstants {
 		addActionListeners();
 		
 		graph = new NameSurferGraph();
+		// dont forget to specify that i add it to  a Center region
 		add(graph, CENTER);
 		
 		base = new NameSurferDataBase(NAMES_DATA_FILE);
@@ -49,6 +50,7 @@ public class NameSurfer extends Program implements NameSurferConstants {
 		if(cmd.equals("Graph")) {			
 			NameSurferEntry entry = base.findEntry(nameInput.getText());
 			graph.addEntry(entry);
+			// also i can do sth like entry.toString and it automatically prints info about name i have typed in textfield
 		}
 		if(cmd.equals("Clear")) {
 			graph.clear();
