@@ -62,6 +62,12 @@ public class NameSurferGraph extends GCanvas
 		
 	}
 	
+	/*
+	Redraws rank and Name for each decade for NameSurferEntry: chooses where to put 
+	 * rank line dynamically according to screen dimentions. Colors each new entry in one of 4 colors 
+	 * supplied by chooseColor method
+	 */
+	 
 	private void redrawNames(int columnWidth, int height) {
 		double heightOfOne = (height - (2.0*GRAPH_MARGIN_SIZE))/MAX_RANK;
 		for(NameSurferEntry e:entries) {
