@@ -42,6 +42,7 @@ public class FacePamphletClient extends GraphicsProgram {
 	 *  the Name component that is displayed in the profile */	
 	public static final double TOP_MARGIN = 20;	
 
+
 	/** The address of the server that should be contacted when sending
 	 * any Requests. */
 	private static final String HOST = "http://localhost:8000/";
@@ -50,6 +51,9 @@ public class FacePamphletClient extends GraphicsProgram {
 	 * Init is called before the window is created 
 	 */
 	private JTextField field;
+	private JTextField fieldStatus;
+	private JTextField fieldPicture;
+	private JTextField fieldFriend;
 	
 	public void init() {
 		add(new JLabel("Name"), NORTH);
@@ -58,6 +62,20 @@ public class FacePamphletClient extends GraphicsProgram {
 		add(new JButton("Add"), NORTH);
 		add(new JButton("Delete"), NORTH);
 		add(new JButton("Lookup"), NORTH);
+		
+		// extensions buttons
+		
+		fieldStatus = new JTextField(TEXT_FIELD_SIZE);
+		add(fieldStatus, WEST);
+		add(new JButton("Change Status"), WEST);
+		
+		fieldPicture = new JTextField(TEXT_FIELD_SIZE);
+		add(fieldPicture, WEST);
+		add(new JButton("Change Picture"), WEST);
+		
+		fieldFriend = new JTextField(TEXT_FIELD_SIZE);
+		add(fieldFriend, WEST);
+		add(new JButton("Add Friend"), WEST);
 		
 		addActionListeners();
 	}
@@ -74,6 +92,9 @@ public class FacePamphletClient extends GraphicsProgram {
 		if(cmd.equals("Lookup")) {
 			containsProfile();
 		}
+		/*if(cmd.equals("setStatus")) {
+			setStatus();
+		}*/
 	}
 	/** 
 	 * Run is called after the window is created 
@@ -102,7 +123,17 @@ public class FacePamphletClient extends GraphicsProgram {
 	 * Again, this is a helper method that we wrote for the "pingTheServer"
 	 * example (above). You should not include it in your final submission.
 	 */
-	
+	/*
+	 * SetStatus doesnt work. SO there is no need to try setImage, because setStatus is easier
+	 * 
+	private void setStatus() {
+		String result = makeRequest("setStatus");
+		if(result.equals("success")) {
+			String text = makeRequest("getStatus");
+			addMessage(text);
+		}
+	}*/
+
 	private void displayProfile() {
 		removeAll();
 		addProfileLabel();
@@ -139,8 +170,23 @@ public class FacePamphletClient extends GraphicsProgram {
 	
 	private String makeRequest(String command) {
 		try {
-			Request r = new Request(command);
-			r.addParam("name", field.getText());
+			Request r = new Request(command);			
+			switch(command) {
+				case "setStatus": 
+					r.addParam("name", field.getText());
+					r.addParam("status", fieldStatus.getText());
+					break;
+				case "setImage": 
+					r.addParam("name", field.getText());
+					r.addParam("imageString", fieldPicture.getText());
+					break;
+				case "addFriend": 
+					r.addParam("name1", field.getText());
+					r.addParam("name2", fieldFriend.getText());
+					break;
+				default: r.addParam("name", field.getText());
+					break;		
+			}
 			return SimpleClient.makeRequest(HOST, r);			
 		}
 		catch (IOException e) {
