@@ -62,6 +62,19 @@ public class FacePamphletClient extends GraphicsProgram {
 		addActionListeners();
 	}
 	
+	
+	public void actionPerformed(ActionEvent e) {
+		String cmd = e.getActionCommand();
+		if(cmd.equals("Add")) {
+			addProfile();
+		}
+		if(cmd.equals("Delete")) {
+			deleteProfile();
+		} 
+		if(cmd.equals("Lookup")) {
+			containsProfile();
+		}
+	}
 	/** 
 	 * Run is called after the window is created 
 	 */
@@ -90,29 +103,53 @@ public class FacePamphletClient extends GraphicsProgram {
 	 * example (above). You should not include it in your final submission.
 	 */
 	
-	public void actionPerformed(ActionEvent e) {
-		String cmd = e.getActionCommand();
-		if(cmd.equals("Add")) {
-			String command = "addProfile";
-			HashMap<String, String> params = new HashMap<String, String>();
-			params.put(command, field.getText());
-			Request add = new Request(command);
-			
-			try {
-				String result = SimpleClient.makeRequest(HOST,add);
-				if(result.equals("success")) {
-					this.removeAll();
-					addProfileLabel();
-					String msg = "New profile created";
-					addMessage(msg);
-				}
-			}
-			 catch (IOException e1) {
-				this.removeAll();
-				addMessage(e1.getMessage());
-			}		
+	private void displayProfile() {
+		removeAll();
+		addProfileLabel();
+		addMessage("Displaying "+field.getText());
+	}
+	
+	private void containsProfile() {
+		String result = makeRequest("containsProfile");
+		if(result.equals("true")) {
+			displayProfile();
+		}
+		else {
+			removeAll();
+			addMessage("A profile with a name "+field.getText() + " does not exist");
 		}
 	}
+	
+	private void deleteProfile() {
+		String result = makeRequest("deleteProfile");
+		if(result.equals("success")) {
+			removeAll();
+			addMessage("Profile of "+field.getText() + " deleted");
+		}
+	}
+	
+	private void addProfile() {
+		String result = makeRequest("addProfile");
+		if(result.equals("success")) {
+			removeAll();
+			addProfileLabel();
+			addMessage("New profile created");
+		}
+	}
+	
+	private String makeRequest(String command) {
+		try {
+			Request r = new Request(command);
+			r.addParam("name", field.getText());
+			return SimpleClient.makeRequest(HOST, r);			
+		}
+		catch (IOException e) {
+			removeAll();
+			addMessage(e.getMessage());
+			return null;
+		}
+	}
+
 	
 	private void addMessage(String msg) {
 		GLabel l = new GLabel(msg);
