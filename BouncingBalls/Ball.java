@@ -25,10 +25,6 @@ public class Ball {
 	}
 	
 	// 3. what methods can you call on a ball?
-	/* 
-	I need to return GOval , because i cant add to GCanvas a Ball, it says 
-	The method add(GObject) in the type GraphicsProgram is not applicable for the arguments (Ball)
-	*/
 	public GOval getGOval() {
 		return circle;
 	}
@@ -57,6 +53,7 @@ public class Ball {
 	private double getRandomSpeed() {
 		RandomGenerator rg = RandomGenerator.getInstance();
 		double speed = rg.nextDouble(1,3);
+		// this makes ball go right or left when it first appears on the screen
 		if(rg.nextBoolean()) {
 			speed *= -1;
 		}
